@@ -1,0 +1,261 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Register - AI Study Assistant</title>
+
+    <style>
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            min-height: 100vh;
+
+            display: flex;
+            justify-content: center;
+            align-items: center;
+
+            font-family: Arial, sans-serif;
+
+            background-image:
+                linear-gradient(
+                    rgba(0, 0, 0, 0.20),
+                    rgba(0, 0, 0, 0.20)
+                ),
+                url("{% static 'css/image/background.jpg' %}");
+
+            background-size: cover;
+            background-position: center;
+            background-repeat: no-repeat;
+            background-attachment: fixed;
+        }
+
+        .register-box {
+            width: 400px;
+
+            padding: 35px;
+
+            background: rgba(255, 255, 255, 0.96);
+
+            border-radius: 20px;
+
+            box-shadow: 0 15px 40px rgba(0, 0, 0, 0.45);
+        }
+
+        h1 {
+            text-align: center;
+
+            color: #222;
+
+            font-size: 28px;
+
+            margin-bottom: 8px;
+        }
+
+        h2 {
+            text-align: center;
+
+            color: #666;
+
+            font-size: 19px;
+
+            font-weight: normal;
+
+            margin-bottom: 28px;
+        }
+
+        label {
+            display: block;
+
+            margin-bottom: 7px;
+
+            color: #333;
+
+            font-weight: 600;
+        }
+
+        input {
+            width: 100%;
+
+            padding: 13px;
+
+            margin-bottom: 17px;
+
+            border: 1px solid #ccc;
+
+            border-radius: 9px;
+
+            font-size: 15px;
+
+            outline: none;
+        }
+
+        input:focus {
+            border-color: #1976d2;
+        }
+
+        .register-btn {
+            width: 100%;
+
+            padding: 13px;
+
+            border: none;
+
+            border-radius: 9px;
+
+            background: #1976d2;
+
+            color: white;
+
+            font-size: 16px;
+
+            font-weight: 600;
+
+            cursor: pointer;
+        }
+
+        .register-btn:hover {
+            background: #125ca8;
+        }
+
+        .login-btn {
+            display: block;
+
+            width: 100%;
+
+            padding: 12px;
+
+            margin-top: 12px;
+
+            text-align: center;
+
+            text-decoration: none;
+
+            border: 1px solid #1976d2;
+
+            border-radius: 9px;
+
+            color: #1976d2;
+
+            background: white;
+
+            font-size: 15px;
+
+            font-weight: 600;
+        }
+
+        .login-btn:hover {
+            background: #1976d2;
+
+            color: white;
+        }
+
+        .message {
+            text-align: center;
+
+            margin-top: 15px;
+
+            color: red;
+        }
+
+        @media (max-width: 500px) {
+
+            .register-box {
+                width: 90%;
+                padding: 28px;
+            }
+
+        }
+
+    </style>
+
+</head>
+
+<body>
+
+    <div class="register-box">
+
+        <h1>AI Study Assistant</h1>
+
+        <h2>Create Your Account</h2>
+
+        <form method="POST">
+
+            {% csrf_token %}
+
+            <label>Name</label>
+
+            <input
+                type="text"
+                name="name"
+                placeholder="Enter your name"
+                required
+            >
+
+            <label>Email</label>
+
+            <input
+                type="email"
+                name="email"
+                placeholder="Enter your email"
+                required
+            >
+
+            <label>Password</label>
+
+            <input
+                type="password"
+                name="password"
+                placeholder="Enter your password"
+                required
+            >
+
+            <label>Phone Number</label>
+
+            <input
+                type="text"
+                name="phone_number"
+                placeholder="Enter phone number"
+                required
+            >
+
+            <button
+                type="submit"
+                class="register-btn"
+            >
+                Create Account
+            </button>
+
+        </form>
+
+        <a
+            href="{% url 'login' %}"
+            class="login-btn"
+        >
+            Login
+        </a>
+
+        {% for message in messages %}
+
+            <p class="message">
+                {{ message }}
+            </p>
+
+        {% endfor %}
+
+    </div>
+
+</body>
+
+</html>
