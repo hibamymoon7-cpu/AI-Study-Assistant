@@ -2,8 +2,9 @@ from django.shortcuts import render, redirect
 from django.contrib.auth.models import User
 from django.contrib.auth import authenticate, login, logout
 from django.contrib import messages
+from django.contrib.auth.decorators import login_required
 
-from .models import UserProfile
+from .models import UserProfile, StudyMaterial
 
 
 # =========================
@@ -17,8 +18,19 @@ def register(request):
         name = request.POST.get("name")
         email = request.POST.get("email")
         password = request.POST.get("password")
+        confirm_password = request.POST.get("confirm_password")
         phone_number = request.POST.get("phone_number")
 
+        # Check password
+
+        if password != confirm_password:
+
+            messages.error(
+                request,
+                "Passwords do not match."
+            )
+
+            return redirect("register")
 
         # Check email already exists
 
@@ -31,7 +43,6 @@ def register(request):
 
             return redirect("register")
 
-
         # Create user
 
         user = User.objects.create_user(
@@ -41,27 +52,19 @@ def register(request):
             first_name=name
         )
 
-
-        # Create user profile
+        # Create profile
 
         UserProfile.objects.create(
             user=user,
             phone_number=phone_number
         )
 
-
-        # Success message
-
         messages.success(
             request,
             "Registration successful!"
         )
 
-
         return redirect("login")
-
-
-    # Show register page
 
     return render(
         request,
@@ -80,7 +83,6 @@ def user_login(request):
         email = request.POST.get("email")
         password = request.POST.get("password")
 
-
         # Authenticate user
 
         user = authenticate(
@@ -89,7 +91,6 @@ def user_login(request):
             password=password
         )
 
-
         if user is not None:
 
             login(
@@ -97,8 +98,9 @@ def user_login(request):
                 user
             )
 
-            return redirect("home")
+            # After login → Study Materials
 
+            return redirect("study_materials")
 
         else:
 
@@ -106,9 +108,6 @@ def user_login(request):
                 request,
                 "Invalid email or password."
             )
-
-
-    # Show login page
 
     return render(
         request,
@@ -136,4 +135,59 @@ def home(request):
     return render(
         request,
         "home.html"
+    )
+
+
+# =========================
+# STUDY MATERIALS
+# =========================
+
+@login_required
+def study_materials(request):
+
+    if request.method == "POST":
+
+        title = request.POST.get("title")
+        description = request.POST.get("description")
+        file = request.FILES.get("file")
+
+        # Check file
+
+        if not file:
+
+            messages.error(
+                request,
+                "Please select a file."
+            )
+
+            return redirect("study_materials")
+
+        # Save study material
+
+        StudyMaterial.objects.create(
+            user=request.user,
+            title=title,
+            description=description,
+            file=file
+        )
+
+        messages.success(
+            request,
+            "Study material uploaded successfully!"
+        )
+
+        return redirect("study_materials")
+
+    # Get only logged-in user's materials
+
+    materials = StudyMaterial.objects.filter(
+        user=request.user
+    ).order_by("-uploaded_at")
+
+    return render(
+        request,
+        "study_materials.html",
+        {
+            "materials": materials
+        }
     )

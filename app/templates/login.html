@@ -7,9 +7,10 @@
 
     <meta charset="UTF-8">
 
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0">
 
-    <title>Login - AI Study Assistant</title>
+    <title>Login | StudyMaster AI</title>
 
     <style>
 
@@ -17,226 +18,456 @@
             margin: 0;
             padding: 0;
             box-sizing: border-box;
+            font-family: Arial, sans-serif;
         }
 
         body {
+
             min-height: 100vh;
 
             display: flex;
             justify-content: center;
             align-items: center;
 
-            font-family: Arial, sans-serif;
+            padding: 25px;
 
-            background-image:
-                linear-gradient(
-                    rgba(0, 0, 0, 0.20),
-                    rgba(0, 0, 0, 0.20)
+            background:
+                radial-gradient(
+                    circle at 10% 10%,
+                    #dceaff,
+                    transparent 35%
                 ),
-                url("{% static 'css/image/background.jpg' %}");
-
-            background-size: cover;
-            background-position: center;
-            background-repeat: no-repeat;
-            background-attachment: fixed;
+                radial-gradient(
+                    circle at 90% 90%,
+                    #cddcff,
+                    transparent 35%
+                ),
+                #edf4ff;
         }
 
-        .login-box {
-            width: 400px;
+        .login-card {
 
-            padding: 35px;
+            width: 100%;
+            max-width: 470px;
 
-            background: rgba(255, 255, 255, 0.96);
+            padding: 42px 40px;
 
-            border-radius: 20px;
+            background: rgba(241,246,255,0.92);
 
-            box-shadow: 0 15px 40px rgba(0, 0, 0, 0.45);
+            border-radius: 32px;
+
+            box-shadow:
+                15px 15px 35px rgba(130,150,190,0.25),
+                -15px -15px 35px rgba(255,255,255,0.95);
+
+            text-align: center;
         }
+
+        /* LOGO */
+
+        .logo-box {
+
+            width: 135px;
+            height: 135px;
+
+            margin: 0 auto 20px;
+
+            border-radius: 30px;
+
+            overflow: hidden;
+
+            box-shadow:
+                8px 8px 18px rgba(120,145,190,0.25),
+                -8px -8px 18px rgba(255,255,255,0.95);
+        }
+
+        .logo-box img {
+
+            width: 100%;
+            height: 100%;
+
+            object-fit: cover;
+        }
+
+        /* TITLE */
 
         h1 {
-            text-align: center;
 
-            color: #222;
+            color: #111b4d;
 
-            font-size: 28px;
+            font-size: 32px;
 
             margin-bottom: 8px;
         }
 
-        h2 {
-            text-align: center;
+        .subtitle {
 
-            color: #666;
+            color: #69769a;
 
-            font-size: 19px;
+            font-size: 13px;
 
-            font-weight: normal;
+            letter-spacing: 3px;
 
-            margin-bottom: 28px;
+            margin-bottom: 30px;
         }
 
-        label {
-            display: block;
+        /* MESSAGES */
 
-            margin-bottom: 7px;
-
-            color: #333;
-
-            font-weight: 600;
-        }
-
-        input {
-            width: 100%;
-
-            padding: 13px;
-
-            margin-bottom: 17px;
-
-            border: 1px solid #ccc;
-
-            border-radius: 9px;
-
-            font-size: 15px;
-
-            outline: none;
-        }
-
-        input:focus {
-            border-color: #1976d2;
-        }
-
-        .login-btn {
-            width: 100%;
-
-            padding: 13px;
-
-            border: none;
-
-            border-radius: 9px;
-
-            background: #1976d2;
-
-            color: white;
-
-            font-size: 16px;
-
-            font-weight: 600;
-
-            cursor: pointer;
-        }
-
-        .login-btn:hover {
-            background: #125ca8;
-        }
-
-        .register-btn {
-            display: block;
-
-            width: 100%;
-
-            padding: 12px;
-
-            margin-top: 12px;
-
-            text-align: center;
-
-            text-decoration: none;
-
-            border: 1px solid #1976d2;
-
-            border-radius: 9px;
-
-            color: #1976d2;
-
-            background: white;
-
-            font-size: 15px;
-
-            font-weight: 600;
-        }
-
-        .register-btn:hover {
-            background: #1976d2;
-
-            color: white;
+        .messages {
+            margin-bottom: 15px;
         }
 
         .message {
-            text-align: center;
 
-            margin-top: 15px;
+            background: #ffe4e4;
 
-            color: red;
+            color: #c62828;
+
+            padding: 10px;
+
+            border-radius: 12px;
+
+            font-size: 13px;
+
+            margin-bottom: 7px;
         }
 
-        @media (max-width: 500px) {
+        /* INPUT */
 
-            .login-box {
-                width: 90%;
-                padding: 28px;
+        .input-group {
+
+            position: relative;
+
+            margin-bottom: 17px;
+        }
+
+        .input-icon {
+
+            position: absolute;
+
+            left: 18px;
+
+            top: 50%;
+
+            transform: translateY(-50%);
+
+            font-size: 20px;
+        }
+
+        .input-group input {
+
+            width: 100%;
+
+            height: 60px;
+
+            border: none;
+
+            outline: none;
+
+            border-radius: 19px;
+
+            padding: 0 18px 0 55px;
+
+            font-size: 15px;
+
+            color: #26345f;
+
+            background: #edf4ff;
+
+            box-shadow:
+                inset 4px 4px 10px rgba(140,160,200,0.20),
+                inset -4px -4px 10px rgba(255,255,255,0.95);
+        }
+
+        .input-group input::placeholder {
+            color: #7c89aa;
+        }
+
+        .input-group input:focus {
+
+            box-shadow:
+                inset 3px 3px 8px rgba(140,160,200,0.20),
+                0 0 0 2px rgba(30,100,230,0.15);
+        }
+
+        /* OPTIONS */
+
+        .options {
+
+            display: flex;
+
+            justify-content: space-between;
+
+            align-items: center;
+
+            margin: 5px 5px 22px;
+
+            font-size: 13px;
+        }
+
+        .remember {
+
+            display: flex;
+
+            align-items: center;
+
+            gap: 7px;
+
+            color: #566589;
+        }
+
+        .remember input {
+
+            width: 17px;
+            height: 17px;
+
+            accent-color: #1767e8;
+        }
+
+        .forgot {
+
+            color: #145ddd;
+
+            text-decoration: none;
+
+            font-weight: bold;
+        }
+
+        /* LOGIN BUTTON */
+
+        .login-btn {
+
+            width: 100%;
+
+            height: 59px;
+
+            border: none;
+
+            border-radius: 20px;
+
+            cursor: pointer;
+
+            color: white;
+
+            font-size: 18px;
+
+            font-weight: bold;
+
+            background:
+                linear-gradient(
+                    90deg,
+                    #1684ff,
+                    #164de0
+                );
+
+            box-shadow:
+                0 10px 25px rgba(35,100,230,0.35);
+
+            transition: 0.3s;
+        }
+
+        .login-btn:hover {
+
+            transform: translateY(-2px);
+
+            box-shadow:
+                0 14px 30px rgba(35,100,230,0.40);
+        }
+
+        /* REGISTER */
+
+        .register-text {
+
+            margin-top: 25px;
+
+            color: #68769a;
+
+            font-size: 14px;
+        }
+
+        .register-text a {
+
+            color: #125edc;
+
+            font-weight: bold;
+
+            text-decoration: none;
+        }
+
+        .register-text a:hover {
+
+            text-decoration: underline;
+        }
+
+        /* MOBILE */
+
+        @media(max-width: 550px) {
+
+            body {
+                padding: 15px;
             }
 
+            .login-card {
+
+                padding: 35px 20px;
+
+                border-radius: 26px;
+            }
+
+            .logo-box {
+
+                width: 110px;
+                height: 110px;
+            }
+
+            h1 {
+                font-size: 27px;
+            }
         }
 
     </style>
 
 </head>
 
+
 <body>
 
-    <div class="login-box">
 
-        <h1>AI Study Assistant</h1>
+<div class="login-card">
 
-        <h2>Welcome Back</h2>
 
-        <form method="POST">
+    <!-- LOGO -->
 
-            {% csrf_token %}
+    <div class="logo-box">
 
-            <label>Email</label>
+        <img
+            src="{% static 'css/study-logo.jpeg' %}"
+            alt="StudyMaster AI"
+        >
+
+    </div>
+
+
+    <!-- TITLE -->
+
+    <h1>
+        Welcome Back
+    </h1>
+
+    <div class="subtitle">
+        SIGN IN TO CONTINUE
+    </div>
+
+
+    <!-- DJANGO MESSAGES -->
+
+    {% if messages %}
+
+        <div class="messages">
+
+            {% for message in messages %}
+
+                <div class="message">
+                    {{ message }}
+                </div>
+
+            {% endfor %}
+
+        </div>
+
+    {% endif %}
+
+
+    <!-- LOGIN FORM -->
+
+    <form method="POST">
+
+        {% csrf_token %}
+
+
+        <!-- EMAIL -->
+
+        <div class="input-group">
+
+            <span class="input-icon">👤</span>
 
             <input
                 type="email"
                 name="email"
-                placeholder="Enter your email"
+                placeholder="Username or Email"
                 required
             >
 
-            <label>Password</label>
+        </div>
+
+
+        <!-- PASSWORD -->
+
+        <div class="input-group">
+
+            <span class="input-icon">🔒</span>
 
             <input
                 type="password"
                 name="password"
-                placeholder="Enter your password"
+                placeholder="Password"
                 required
             >
 
-            <button
-                type="submit"
-                class="login-btn"
-            >
-                Login
-            </button>
+        </div>
 
-        </form>
 
-        <a
-            href="{% url 'register' %}"
-            class="register-btn"
+        <!-- OPTIONS -->
+
+        <div class="options">
+
+            <label class="remember">
+
+                <input
+                    type="checkbox"
+                    name="remember"
+                >
+
+                Remember Me
+
+            </label>
+
+
+            <a href="#" class="forgot">
+                Forgot Password?
+            </a>
+
+        </div>
+
+
+        <!-- BUTTON -->
+
+        <button
+            type="submit"
+            class="login-btn"
         >
+            Login →
+        </button>
+
+
+    </form>
+
+
+    <!-- REGISTER -->
+
+    <div class="register-text">
+
+        Don't have an account?
+
+        <a href="{% url 'register' %}">
             Create Account
         </a>
 
-        {% for message in messages %}
-
-            <p class="message">
-                {{ message }}
-            </p>
-
-        {% endfor %}
-
     </div>
+
+
+</div>
+
 
 </body>
 
