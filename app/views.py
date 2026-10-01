@@ -4,6 +4,8 @@ from django.contrib.auth import authenticate, login, logout
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 
+from pypdf import PdfReader
+
 from .models import UserProfile, StudyMaterial
 
 
@@ -88,7 +90,6 @@ def user_login(request):
 
             login(request, user)
 
-            # Login successful → Study Materials
             return redirect("study_materials")
 
         else:
@@ -118,7 +119,6 @@ def user_logout(request):
         "You have been logged out successfully."
     )
 
-    # Logout → Login page
     return redirect("login")
 
 
@@ -141,6 +141,10 @@ def home(request):
 @login_required
 def study_materials(request):
 
+    # =========================
+    # PDF UPLOAD
+    # =========================
+
     if request.method == "POST":
 
         title = request.POST.get("title")
@@ -152,27 +156,70 @@ def study_materials(request):
 
             messages.error(
                 request,
-                "Please select a file."
+                "Please select a PDF file."
             )
 
             return redirect("study_materials")
 
-        # Save study material
+        # Check PDF
+        if not file.name.lower().endswith(".pdf"):
+
+            messages.error(
+                request,
+                "Only PDF files are allowed."
+            )
+
+            return redirect("study_materials")
+
+        # =========================
+        # READ PDF TEXT
+        # =========================
+
+        pdf_text = ""
+
+        try:
+
+            reader = PdfReader(file)
+
+            for page in reader.pages:
+
+                text = page.extract_text()
+
+                if text:
+                    pdf_text += text + "\n"
+
+        except Exception:
+
+            messages.error(
+                request,
+                "Unable to read this PDF."
+            )
+
+            return redirect("study_materials")
+
+        # =========================
+        # SAVE STUDY MATERIAL
+        # =========================
+
         StudyMaterial.objects.create(
             user=request.user,
             title=title,
             description=description,
+            pdf_text=pdf_text,
             file=file
         )
 
         messages.success(
             request,
-            "Study material uploaded successfully!"
+            "PDF uploaded and text extracted successfully!"
         )
 
         return redirect("study_materials")
 
-    # Show only logged-in user's materials
+    # =========================
+    # SHOW USER MATERIALS
+    # =========================
+
     materials = StudyMaterial.objects.filter(
         user=request.user
     ).order_by("-uploaded_at")
@@ -184,3 +231,39 @@ def study_materials(request):
             "materials": materials
         }
     )
+# =========================
+# DELETE STUDY MATERIAL
+# =========================
+
+@login_required
+def delete_study_material(request, material_id):
+
+    if request.method == "POST":
+
+        material = StudyMaterial.objects.filter(
+            id=material_id,
+            user=request.user
+        ).first()
+
+        if material:
+
+            # Delete uploaded PDF
+            if material.file:
+                material.file.delete(save=False)
+
+            # Delete database record
+            material.delete()
+
+            messages.success(
+                request,
+                "Study material deleted successfully."
+            )
+
+        else:
+
+            messages.error(
+                request,
+                "Study material not found."
+            )
+
+    return redirect("study_materials")

@@ -129,3 +129,21 @@ MAILERS = {
         'BACKEND': 'django.core.mail.backends.console.EmailBackend',
     },
 }
+
+
+# Gmail SMTP
+
+# Email Configuration
+
+MAILERS = {
+    'default': {
+        'BACKEND': 'django.core.mail.backends.smtp.EmailBackend',
+        'OPTIONS': {
+            'host': 'smtp.gmail.com',
+            'port': 587,
+            'username': 'YOUR_GMAIL@gmail.com',
+            'password': 'YOUR_GMAIL_APP_PASSWORD',
+            'use_tls': True,
+        },
+    },
+}
