@@ -141,8 +141,8 @@ MAILERS = {
         'OPTIONS': {
             'host': 'smtp.gmail.com',
             'port': 587,
-            'username': 'YOUR_GMAIL@gmail.com',
-            'password': 'YOUR_GMAIL_APP_PASSWORD',
+            'username': 'hibamymoon7@gmail.com',
+            'password': '*********',
             'use_tls': True,
         },
     },
