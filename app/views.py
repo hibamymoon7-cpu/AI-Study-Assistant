@@ -19,10 +19,8 @@ def register(request):
         email = request.POST.get("email")
         password = request.POST.get("password")
         confirm_password = request.POST.get("confirm_password")
-        phone_number = request.POST.get("phone_number")
 
         # Check password
-
         if password != confirm_password:
 
             messages.error(
@@ -32,8 +30,7 @@ def register(request):
 
             return redirect("register")
 
-        # Check email already exists
-
+        # Check email
         if User.objects.filter(email=email).exists():
 
             messages.error(
@@ -44,7 +41,6 @@ def register(request):
             return redirect("register")
 
         # Create user
-
         user = User.objects.create_user(
             username=email,
             email=email,
@@ -52,16 +48,14 @@ def register(request):
             first_name=name
         )
 
-        # Create profile
-
+        # Create user profile
         UserProfile.objects.create(
-            user=user,
-            phone_number=phone_number
+            user=user
         )
 
         messages.success(
             request,
-            "Registration successful!"
+            "Registration successful! Please login."
         )
 
         return redirect("login")
@@ -84,7 +78,6 @@ def user_login(request):
         password = request.POST.get("password")
 
         # Authenticate user
-
         user = authenticate(
             request,
             username=email,
@@ -93,13 +86,9 @@ def user_login(request):
 
         if user is not None:
 
-            login(
-                request,
-                user
-            )
+            login(request, user)
 
-            # After login → Study Materials
-
+            # Login successful → Study Materials
             return redirect("study_materials")
 
         else:
@@ -119,10 +108,17 @@ def user_login(request):
 # LOGOUT
 # =========================
 
+@login_required
 def user_logout(request):
 
     logout(request)
 
+    messages.success(
+        request,
+        "You have been logged out successfully."
+    )
+
+    # Logout → Login page
     return redirect("login")
 
 
@@ -152,7 +148,6 @@ def study_materials(request):
         file = request.FILES.get("file")
 
         # Check file
-
         if not file:
 
             messages.error(
@@ -163,7 +158,6 @@ def study_materials(request):
             return redirect("study_materials")
 
         # Save study material
-
         StudyMaterial.objects.create(
             user=request.user,
             title=title,
@@ -178,8 +172,7 @@ def study_materials(request):
 
         return redirect("study_materials")
 
-    # Get only logged-in user's materials
-
+    # Show only logged-in user's materials
     materials = StudyMaterial.objects.filter(
         user=request.user
     ).order_by("-uploaded_at")

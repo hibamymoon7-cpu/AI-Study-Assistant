@@ -1,0 +1,1048 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Study Materials | StudyMaster AI</title>
+
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background: #f4f7ff;
+            color: #182542;
+        }
+
+        /* SIDEBAR */
+
+        .sidebar {
+            position: fixed;
+            left: 0;
+            top: 0;
+            width: 270px;
+            height: 100vh;
+            background: linear-gradient(180deg, #182342, #101a35);
+            padding: 25px 15px;
+            color: white;
+        }
+
+        .logo {
+            padding: 0 15px 25px;
+            border-bottom: 1px solid rgba(255,255,255,.1);
+        }
+
+        .logo h2 {
+            font-size: 22px;
+        }
+
+        .logo span {
+            color: #756cff;
+        }
+
+        .logo p {
+            font-size: 12px;
+            color: #aab5d5;
+            margin-top: 5px;
+        }
+
+        .menu {
+            margin-top: 30px;
+        }
+
+        .menu a {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            padding: 15px 18px;
+            margin-bottom: 8px;
+            color: #c8d0e8;
+            text-decoration: none;
+            border-radius: 12px;
+            transition: .3s;
+        }
+
+        .menu a:hover,
+        .menu a.active {
+            background: linear-gradient(90deg, #4d55e8, #6268f5);
+            color: white;
+        }
+
+        .menu-icon {
+            font-size: 20px;
+        }
+
+        .ai-box {
+            position: absolute;
+            left: 15px;
+            right: 15px;
+            bottom: 20px;
+            padding: 20px;
+            border-radius: 18px;
+            background: linear-gradient(135deg, #27347c, #22295e);
+        }
+
+        .ai-box h3 {
+            font-size: 18px;
+            margin-bottom: 10px;
+        }
+
+        .ai-box p {
+            font-size: 13px;
+            line-height: 1.6;
+            color: #cbd3f2;
+        }
+
+        /* MAIN */
+
+        .main {
+            margin-left: 270px;
+            min-height: 100vh;
+        }
+
+        /* TOPBAR */
+
+        .topbar {
+            height: 75px;
+            background: white;
+            display: flex;
+            justify-content: flex-end;
+            align-items: center;
+            padding: 0 35px;
+            border-bottom: 1px solid #e8ebf5;
+        }
+
+        .user {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            color: #253252;
+            font-weight: 600;
+        }
+
+        .user-icon {
+            width: 40px;
+            height: 40px;
+            background: #edf1ff;
+            border-radius: 50%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .logout {
+            margin-left: 20px;
+            text-decoration: none;
+            color: #66708c;
+        }
+
+        /* CONTENT */
+
+        .content {
+            padding: 35px;
+        }
+
+        .heading {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            margin-bottom: 8px;
+        }
+
+        .folder {
+            width: 48px;
+            height: 48px;
+            background: #5865f2;
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 24px;
+        }
+
+        h1 {
+            font-size: 32px;
+        }
+
+        .subtitle {
+            color: #687595;
+            margin-left: 63px;
+            margin-bottom: 30px;
+        }
+
+        /* UPLOAD */
+
+        .upload-box {
+            background: white;
+            border: 2px dashed #9bb8ff;
+            border-radius: 18px;
+            padding: 45px;
+            text-align: center;
+            margin-bottom: 28px;
+        }
+
+        .upload-icon {
+            font-size: 50px;
+            margin-bottom: 15px;
+        }
+
+        .upload-box h2 {
+            font-size: 20px;
+            margin-bottom: 8px;
+        }
+
+        .upload-box p {
+            color: #7783a1;
+            margin-bottom: 20px;
+        }
+
+        .upload-btn {
+            display: inline-block;
+            background: linear-gradient(135deg, #4d55ed, #6c5df5);
+            color: white;
+            padding: 13px 25px;
+            border-radius: 10px;
+            font-weight: 600;
+            cursor: pointer;
+        }
+
+        .upload-btn input {
+            display: none;
+        }
+
+        .upload-form {
+            margin-top: 20px;
+        }
+
+        .upload-form input[type="text"],
+        .upload-form textarea {
+            width: 100%;
+            max-width: 500px;
+            padding: 13px;
+            border: 1px solid #dfe4f1;
+            border-radius: 9px;
+            margin-bottom: 10px;
+        }
+
+        .submit-btn {
+            background: #4d55ed;
+            border: none;
+            color: white;
+            padding: 12px 25px;
+            border-radius: 9px;
+            cursor: pointer;
+        }
+
+        /* SEARCH */
+
+        .search {
+            width: 100%;
+            padding: 16px 20px;
+            border: 1px solid #e0e5f1;
+            border-radius: 12px;
+            background: white;
+            margin-bottom: 25px;
+            font-size: 14px;
+        }
+
+        /* MATERIAL GRID */
+
+        .materials {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 20px;
+        }
+
+        .material-card {
+            background: white;
+            border-radius: 17px;
+            padding: 20px;
+            box-shadow: 0 5px 25px rgba(40,55,100,.06);
+        }
+
+        .file-top {
+            display: flex;
+            gap: 14px;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+
+        .pdf {
+            width: 50px;
+            height: 55px;
+            background: #fff0f0;
+            border-radius: 10px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 25px;
+        }
+
+        .file-info h3 {
+            font-size: 16px;
+            margin-bottom: 6px;
+        }
+
+        .file-info p {
+            color: #8892aa;
+            font-size: 12px;
+        }
+
+        .buttons {
+            display: flex;
+            gap: 7px;
+            flex-wrap: wrap;
+        }
+
+        .buttons a,
+        .buttons button {
+            border: none;
+            padding: 9px 11px;
+            border-radius: 8px;
+            font-size: 12px;
+            cursor: pointer;
+            text-decoration: none;
+        }
+
+        .view {
+            background: #eaf4ff;
+            color: #2878d7;
+        }
+
+        .ask {
+            background: #e3faf5;
+            color: #079a7c;
+        }
+
+        .mcq {
+            background: #f0eaff;
+            color: #7252dc;
+        }
+
+        .delete {
+            background: #ffe9ed;
+            color: #ed3f59;
+        }
+
+        /* MODAL */
+
+        .modal {
+            display: none;
+            position: fixed;
+            inset: 0;
+            background: rgba(10,20,45,.55);
+            justify-content: center;
+            align-items: center;
+            z-index: 1000;
+        }
+
+        .modal-box {
+            background: white;
+            width: 90%;
+            max-width: 650px;
+            border-radius: 18px;
+            padding: 25px;
+            max-height: 85vh;
+            overflow-y: auto;
+        }
+
+        .modal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+
+        .close {
+            border: none;
+            background: none;
+            font-size: 25px;
+            cursor: pointer;
+        }
+
+        /* CHAT */
+
+        .chat-area {
+            height: 350px;
+            overflow-y: auto;
+            background: #f5f7ff;
+            border-radius: 12px;
+            padding: 15px;
+        }
+
+        .message {
+            padding: 12px 15px;
+            border-radius: 12px;
+            margin-bottom: 10px;
+            max-width: 80%;
+        }
+
+        .bot {
+            background: #e8ecff;
+        }
+
+        .user-msg {
+            background: #5965ef;
+            color: white;
+            margin-left: auto;
+        }
+
+        .chat-input {
+            display: flex;
+            gap: 8px;
+            margin-top: 12px;
+        }
+
+        .chat-input input {
+            flex: 1;
+            padding: 13px;
+            border: 1px solid #ddd;
+            border-radius: 10px;
+        }
+
+        .chat-input button {
+            background: #5865ef;
+            color: white;
+            border: none;
+            padding: 12px 20px;
+            border-radius: 10px;
+            cursor: pointer;
+        }
+
+        /* MCQ */
+
+        .mcq-question {
+            background: #f6f7ff;
+            padding: 18px;
+            border-radius: 12px;
+            margin-bottom: 15px;
+        }
+
+        .mcq-question h3 {
+            margin-bottom: 12px;
+            font-size: 15px;
+        }
+
+        .option {
+            padding: 10px;
+            background: white;
+            border: 1px solid #e0e4f1;
+            border-radius: 8px;
+            margin: 6px 0;
+        }
+
+        @media(max-width: 1100px) {
+            .materials {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+
+        @media(max-width: 800px) {
+            .sidebar {
+                display: none;
+            }
+
+            .main {
+                margin-left: 0;
+            }
+
+            .materials {
+                grid-template-columns: 1fr;
+            }
+
+            .content {
+                padding: 20px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+<!-- SIDEBAR -->
+
+<div class="sidebar">
+
+    <div class="logo">
+        <h2>🎓 StudyMaster <span>AI</span></h2>
+        <p>Your AI Study Companion</p>
+    </div>
+
+    <div class="menu">
+
+        <a href="#">
+            <span class="menu-icon">⌂</span>
+            Dashboard
+        </a>
+
+        <a href="{% url 'study_materials' %}" class="active">
+            <span class="menu-icon">📖</span>
+            Study Materials
+        </a>
+
+        <a href="#" onclick="openChat()">
+            <span class="menu-icon">💬</span>
+            Ask AI
+        </a>
+
+        <a href="#" onclick="openMCQ()">
+            <span class="menu-icon">📝</span>
+            MCQ Generator
+        </a>
+
+        <a href="#">
+            <span class="menu-icon">📊</span>
+            My Progress
+        </a>
+
+    </div>
+
+    <div class="ai-box">
+        <h3>🧠 Learn Smarter with AI</h3>
+        <p>
+            Upload your notes, ask questions,
+            generate MCQs and boost your learning!
+        </p>
+    </div>
+
+</div>
+
+
+<!-- MAIN -->
+
+<div class="main">
+
+    <div class="topbar">
+
+        <div class="user">
+            <div class="user-icon">👤</div>
+
+            Hi, {{ request.user.first_name }}
+
+            <a href="{% url 'logout' %}" class="logout">
+                ↪ Logout
+            </a>
+        </div>
+
+    </div>
+
+
+    <div class="content">
+
+        <div class="heading">
+
+            <div class="folder">📁</div>
+
+            <h1>My Study Materials</h1>
+
+        </div>
+
+        <p class="subtitle">
+            Upload your study materials and let AI help you learn better.
+        </p>
+
+
+        <!-- UPLOAD -->
+
+        <div class="upload-box">
+
+            <div class="upload-icon">☁️</div>
+
+            <h2>Drag & Drop your PDF here</h2>
+
+            <p>
+                or select a file from your computer
+            </p>
+
+            <form method="POST"
+                  enctype="multipart/form-data"
+                  class="upload-form">
+
+                {% csrf_token %}
+
+                <input
+                    type="text"
+                    name="title"
+                    placeholder="Material title"
+                    required
+                >
+
+                <br>
+
+                <textarea
+                    name="description"
+                    placeholder="Description (optional)"
+                    rows="3"
+                ></textarea>
+
+                <br>
+
+                <label class="upload-btn">
+                    + Select PDF
+
+                    <input
+                        type="file"
+                        name="file"
+                        accept=".pdf"
+                        required
+                    >
+                </label>
+
+                <br><br>
+
+                <button class="submit-btn" type="submit">
+                    Upload Material
+                </button>
+
+            </form>
+
+        </div>
+
+
+        <!-- SEARCH -->
+
+        <input
+            type="text"
+            id="search"
+            class="search"
+            placeholder="🔍 Search your materials..."
+            onkeyup="searchMaterials()"
+        >
+
+
+        <!-- MATERIALS -->
+
+        <div class="materials">
+
+            {% for material in materials %}
+
+            <div class="material-card">
+
+                <div class="file-top">
+
+                    <div class="pdf">
+                        📕
+                    </div>
+
+                    <div class="file-info">
+
+                        <h3>
+                            {{ material.title }}
+                        </h3>
+
+                        <p>
+                            {{ material.file.name }}
+                        </p>
+
+                        <p>
+                            📅 {{ material.uploaded_at|date:"M d, Y" }}
+                        </p>
+
+                    </div>
+
+                </div>
+
+
+                <div class="buttons">
+
+                    <!-- VIEW -->
+
+                    <a
+                        href="{{ material.file.url }}"
+                        target="_blank"
+                        class="view"
+                    >
+                        👁 View
+                    </a>
+
+
+                    <!-- ASK AI -->
+
+                    <button
+                        class="ask"
+                        onclick="openChat('{{ material.id }}')"
+                    >
+                        💬 Ask AI
+                    </button>
+
+
+                    <!-- MCQ -->
+
+                    <button
+                        class="mcq"
+                        onclick="openMCQ('{{ material.id }}')"
+                    >
+                        📝 Generate MCQs
+                    </button>
+
+
+                    <!-- DELETE -->
+
+                    <button
+                        class="delete"
+                        onclick="deleteMaterial('{{ material.id }}')"
+                    >
+                        🗑
+                    </button>
+
+                </div>
+
+            </div>
+
+            {% empty %}
+
+            <div style="grid-column:1/-1;text-align:center;padding:50px;">
+
+                <h2>📚 No study materials yet</h2>
+
+                <p style="margin-top:10px;color:#777;">
+                    Upload your first PDF to start learning with AI.
+                </p>
+
+            </div>
+
+            {% endfor %}
+
+        </div>
+
+    </div>
+
+</div>
+
+
+<!-- ================= CHAT MODAL ================= -->
+
+<div class="modal" id="chatModal">
+
+    <div class="modal-box">
+
+        <div class="modal-header">
+
+            <h2>💬 Ask AI</h2>
+
+            <button
+                class="close"
+                onclick="closeChat()"
+            >
+                ×
+            </button>
+
+        </div>
+
+        <div class="chat-area" id="chatArea">
+
+            <div class="message bot">
+                👋 Hi! Ask me anything about your study material.
+            </div>
+
+        </div>
+
+        <div class="chat-input">
+
+            <input
+                type="text"
+                id="chatInput"
+                placeholder="Ask your question..."
+                onkeypress="handleEnter(event)"
+            >
+
+            <button onclick="sendQuestion()">
+                Send
+            </button>
+
+        </div>
+
+    </div>
+
+</div>
+
+
+<!-- ================= MCQ MODAL ================= -->
+
+<div class="modal" id="mcqModal">
+
+    <div class="modal-box">
+
+        <div class="modal-header">
+
+            <h2>📝 AI Generated MCQs</h2>
+
+            <button
+                class="close"
+                onclick="closeMCQ()"
+            >
+                ×
+            </button>
+
+        </div>
+
+        <div id="mcqContent">
+
+            <p style="text-align:center;padding:30px;">
+                🤖 Click Generate to create questions from your material.
+            </p>
+
+            <button
+                onclick="generateMCQs()"
+                style="
+                display:block;
+                margin:auto;
+                background:#5865ef;
+                color:white;
+                border:none;
+                padding:13px 25px;
+                border-radius:10px;
+                cursor:pointer;
+                "
+            >
+                Generate 10 MCQs
+            </button>
+
+        </div>
+
+    </div>
+
+</div>
+
+
+<script>
+
+let selectedMaterial = null;
+
+
+/* SEARCH */
+
+function searchMaterials() {
+
+    let input =
+        document.getElementById("search").value.toLowerCase();
+
+    let cards =
+        document.querySelectorAll(".material-card");
+
+    cards.forEach(card => {
+
+        let text =
+            card.innerText.toLowerCase();
+
+        card.style.display =
+            text.includes(input) ? "block" : "none";
+
+    });
+
+}
+
+
+/* CHAT */
+
+function openChat(materialId = null) {
+
+    selectedMaterial = materialId;
+
+    document.getElementById("chatModal").style.display = "flex";
+
+}
+
+
+function closeChat() {
+
+    document.getElementById("chatModal").style.display = "none";
+
+}
+
+
+function handleEnter(event) {
+
+    if (event.key === "Enter") {
+
+        sendQuestion();
+
+    }
+
+}
+
+
+function sendQuestion() {
+
+    let input =
+        document.getElementById("chatInput");
+
+    let question =
+        input.value.trim();
+
+    if (!question) return;
+
+
+    let chat =
+        document.getElementById("chatArea");
+
+
+    chat.innerHTML += `
+        <div class="message user-msg">
+            ${question}
+        </div>
+    `;
+
+
+    input.value = "";
+
+
+    /*
+       AI BACKEND WILL BE CONNECTED HERE.
+    */
+
+    setTimeout(() => {
+
+        chat.innerHTML += `
+            <div class="message bot">
+                🤖 AI is ready. We will connect your PDF
+                and AI model in the next step.
+            </div>
+        `;
+
+        chat.scrollTop = chat.scrollHeight;
+
+    }, 500);
+
+}
+
+
+/* MCQ */
+
+function openMCQ(materialId = null) {
+
+    selectedMaterial = materialId;
+
+    document.getElementById("mcqModal").style.display = "flex";
+
+}
+
+
+function closeMCQ() {
+
+    document.getElementById("mcqModal").style.display = "none";
+
+}
+
+
+function generateMCQs() {
+
+    let content =
+        document.getElementById("mcqContent");
+
+    content.innerHTML = `
+        <p style="text-align:center;padding:25px;">
+            🤖 AI is generating MCQs...
+        </p>
+    `;
+
+
+    /*
+       AI MCQ BACKEND WILL BE CONNECTED HERE.
+    */
+
+    setTimeout(() => {
+
+        content.innerHTML = `
+
+            <div class="mcq-question">
+
+                <h3>
+                    1. What is Python?
+                </h3>
+
+                <div class="option">A. Programming Language</div>
+
+                <div class="option">B. Database</div>
+
+                <div class="option">C. Operating System</div>
+
+                <div class="option">D. Browser</div>
+
+            </div>
+
+            <div class="mcq-question">
+
+                <h3>
+                    2. What is a variable?
+                </h3>
+
+                <div class="option">A. Stores data</div>
+
+                <div class="option">B. Deletes data</div>
+
+                <div class="option">C. Opens browser</div>
+
+                <div class="option">D. None</div>
+
+            </div>
+
+            <p style="
+                text-align:center;
+                color:#777;
+                margin-top:20px;
+            ">
+                Real AI-generated questions will appear here
+                after connecting the AI backend.
+            </p>
+
+        `;
+
+    }, 800);
+
+}
+
+
+/* DELETE */
+
+function deleteMaterial(id) {
+
+    if (confirm("Delete this study material?")) {
+
+        alert(
+            "Delete functionality will be connected next."
+        );
+
+    }
+
+}
+
+
+/* CLOSE MODAL WHEN CLICK OUTSIDE */
+
+window.onclick = function(event) {
+
+    let chatModal =
+        document.getElementById("chatModal");
+
+    let mcqModal =
+        document.getElementById("mcqModal");
+
+    if (event.target === chatModal) {
+
+        closeChat();
+
+    }
+
+    if (event.target === mcqModal) {
+
+        closeMCQ();
+
+    }
+
+}
+
+</script>
+
+</body>
+</html>
