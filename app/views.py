@@ -1,12 +1,22 @@
-from django.shortcuts import render, redirect
+
+from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth.models import User
 from django.contrib.auth import authenticate, login, logout
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
+from django.db import transaction
 
 from pypdf import PdfReader
 
 from .models import UserProfile, StudyMaterial
+
+
+# =========================
+# HOME
+# =========================
+
+def home(request):
+    return render(request, "home.html")
 
 
 # =========================
@@ -15,57 +25,65 @@ from .models import UserProfile, StudyMaterial
 
 def register(request):
 
+    if request.user.is_authenticated:
+        return redirect("study_materials")
+
     if request.method == "POST":
 
-        name = request.POST.get("name")
-        email = request.POST.get("email")
-        password = request.POST.get("password")
-        confirm_password = request.POST.get("confirm_password")
+        name = request.POST.get("name", "").strip()
+        email = request.POST.get("email", "").strip().lower()
+        password = request.POST.get("password", "")
+        confirm_password = request.POST.get("confirm_password", "")
 
-        # Check password
+        if not name or not email or not password or not confirm_password:
+            messages.error(request, "Please fill in all required fields.")
+            return redirect("register")
+
         if password != confirm_password:
-
-            messages.error(
-                request,
-                "Passwords do not match."
-            )
-
+            messages.error(request, "Passwords do not match.")
             return redirect("register")
 
-        # Check email
-        if User.objects.filter(email=email).exists():
-
-            messages.error(
-                request,
-                "Email already registered."
-            )
-
+        if User.objects.filter(email__iexact=email).exists():
+            messages.error(request, "Email already registered.")
             return redirect("register")
 
-        # Create user
-        user = User.objects.create_user(
-            username=email,
-            email=email,
-            password=password,
-            first_name=name
-        )
+        if User.objects.filter(username=email).exists():
+            messages.error(request, "This account already exists.")
+            return redirect("register")
 
-        # Create user profile
-        UserProfile.objects.create(
-            user=user
-        )
+        if len(password) < 8:
+            messages.error(
+                request,
+                "Password must contain at least 8 characters."
+            )
+            return redirect("register")
 
-        messages.success(
-            request,
-            "Registration successful! Please login."
-        )
+        try:
+            with transaction.atomic():
 
-        return redirect("login")
+                user = User.objects.create_user(
+                    username=email,
+                    email=email,
+                    password=password,
+                    first_name=name
+                )
 
-    return render(
-        request,
-        "register.html"
-    )
+                UserProfile.objects.create(user=user)
+
+            messages.success(
+                request,
+                "Registration successful! Please login."
+            )
+            return redirect("login")
+
+        except Exception:
+            messages.error(
+                request,
+                "Registration failed. Please try again."
+            )
+            return redirect("register")
+
+    return render(request, "register.html")
 
 
 # =========================
@@ -74,12 +92,21 @@ def register(request):
 
 def user_login(request):
 
+    if request.user.is_authenticated:
+        return redirect("study_materials")
+
     if request.method == "POST":
 
-        email = request.POST.get("email")
-        password = request.POST.get("password")
+        email = request.POST.get("email", "").strip().lower()
+        password = request.POST.get("password", "")
 
-        # Authenticate user
+        if not email or not password:
+            messages.error(
+                request,
+                "Please enter your email and password."
+            )
+            return redirect("login")
+
         user = authenticate(
             request,
             username=email,
@@ -90,19 +117,19 @@ def user_login(request):
 
             login(request, user)
 
+            next_url = request.GET.get("next")
+
+            if next_url and next_url.startswith("/") and not next_url.startswith("//"):
+                return redirect(next_url)
+
             return redirect("study_materials")
 
-        else:
+        messages.error(
+            request,
+            "Invalid email or password."
+        )
 
-            messages.error(
-                request,
-                "Invalid email or password."
-            )
-
-    return render(
-        request,
-        "login.html"
-    )
+    return render(request, "login.html")
 
 
 # =========================
@@ -112,26 +139,15 @@ def user_login(request):
 @login_required
 def user_logout(request):
 
-    logout(request)
+    if request.method == "POST":
+        logout(request)
+        messages.success(
+            request,
+            "You have been logged out successfully."
+        )
+        return redirect("login")
 
-    messages.success(
-        request,
-        "You have been logged out successfully."
-    )
-
-    return redirect("login")
-
-
-# =========================
-# HOME
-# =========================
-
-def home(request):
-
-    return render(
-        request,
-        "home.html"
-    )
+    return redirect("study_materials")
 
 
 # =========================
@@ -141,84 +157,75 @@ def home(request):
 @login_required
 def study_materials(request):
 
-    # =========================
-    # PDF UPLOAD
-    # =========================
-
     if request.method == "POST":
 
-        title = request.POST.get("title")
-        description = request.POST.get("description")
-        file = request.FILES.get("file")
+        title = request.POST.get("title", "").strip()
+        description = request.POST.get("description", "").strip()
+        uploaded_file = request.FILES.get("file")
 
-        # Check file
-        if not file:
-
-            messages.error(
-                request,
-                "Please select a PDF file."
-            )
-
+        if not title:
+            messages.error(request, "Please enter a material title.")
             return redirect("study_materials")
 
-        # Check PDF
-        if not file.name.lower().endswith(".pdf"):
-
-            messages.error(
-                request,
-                "Only PDF files are allowed."
-            )
-
+        if not uploaded_file:
+            messages.error(request, "Please select a PDF file.")
             return redirect("study_materials")
 
-        # =========================
-        # READ PDF TEXT
-        # =========================
+        if not uploaded_file.name.lower().endswith(".pdf"):
+            messages.error(request, "Only PDF files are allowed.")
+            return redirect("study_materials")
 
+        # Extract text from the PDF
         pdf_text = ""
 
         try:
+            reader = PdfReader(uploaded_file)
 
-            reader = PdfReader(file)
+            if reader.is_encrypted:
+                messages.error(
+                    request,
+                    "Password-protected PDFs are not supported."
+                )
+                return redirect("study_materials")
 
             for page in reader.pages:
+                page_text = page.extract_text()
 
-                text = page.extract_text()
+                if page_text:
+                    pdf_text += page_text + "\n"
 
-                if text:
-                    pdf_text += text + "\n"
+            # Reset file position before saving
+            uploaded_file.seek(0)
 
         except Exception:
-
             messages.error(
                 request,
-                "Unable to read this PDF."
+                "Unable to read this PDF. Please select a valid PDF."
             )
-
             return redirect("study_materials")
 
-        # =========================
-        # SAVE STUDY MATERIAL
-        # =========================
+        # Save the material for the logged-in user
+        try:
+            StudyMaterial.objects.create(
+                user=request.user,
+                title=title,
+                description=description,
+                pdf_text=pdf_text,
+                file=uploaded_file
+            )
 
-        StudyMaterial.objects.create(
-            user=request.user,
-            title=title,
-            description=description,
-            pdf_text=pdf_text,
-            file=file
-        )
+            messages.success(
+                request,
+                "Study material uploaded successfully!"
+            )
 
-        messages.success(
-            request,
-            "PDF uploaded and text extracted successfully!"
-        )
+        except Exception:
+            messages.error(
+                request,
+                "Unable to save the material. Please check your model fields."
+            )
 
         return redirect("study_materials")
-
-    # =========================
-    # SHOW USER MATERIALS
-    # =========================
 
     materials = StudyMaterial.objects.filter(
         user=request.user
@@ -227,10 +234,10 @@ def study_materials(request):
     return render(
         request,
         "study_materials.html",
-        {
-            "materials": materials
-        }
+        {"materials": materials}
     )
+
+
 # =========================
 # DELETE STUDY MATERIAL
 # =========================
@@ -238,32 +245,25 @@ def study_materials(request):
 @login_required
 def delete_study_material(request, material_id):
 
-    if request.method == "POST":
+    if request.method != "POST":
+        return redirect("study_materials")
 
-        material = StudyMaterial.objects.filter(
-            id=material_id,
-            user=request.user
-        ).first()
+    material = get_object_or_404(
+        StudyMaterial,
+        id=material_id,
+        user=request.user
+    )
 
-        if material:
+    # Delete the uploaded file
+    if material.file:
+        material.file.delete(save=False)
 
-            # Delete uploaded PDF
-            if material.file:
-                material.file.delete(save=False)
+    # Delete the database record
+    material.delete()
 
-            # Delete database record
-            material.delete()
-
-            messages.success(
-                request,
-                "Study material deleted successfully."
-            )
-
-        else:
-
-            messages.error(
-                request,
-                "Study material not found."
-            )
+    messages.success(
+        request,
+        "Study material deleted successfully."
+    )
 
     return redirect("study_materials")

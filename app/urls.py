@@ -1,41 +1,24 @@
 
 from django.urls import path, reverse_lazy
 from django.contrib.auth import views as auth_views
-
 from . import views
 
 
 urlpatterns = [
 
     # Home Page
-    path(
-        "",
-        views.home,
-        name="home"
-    ),
+    path("", views.home, name="home"),
 
-    # User Registration
-    path(
-        "register/",
-        views.register,
-        name="register"
-    ),
+    # Register
+    path("register/", views.register, name="register"),
 
-    # User Login
-    path(
-        "login/",
-        views.user_login,
-        name="login"
-    ),
+    # Login
+    path("login/", views.user_login, name="login"),
 
-    # User Logout
-    path(
-        "logout/",
-        views.user_logout,
-        name="logout"
-    ),
+    # Logout
+    path("logout/", views.user_logout, name="logout"),
 
-    # Study Materials Page
+    # Study Materials
     path(
         "study-materials/",
         views.study_materials,
@@ -49,7 +32,7 @@ urlpatterns = [
         name="delete_study_material"
     ),
 
-    # Forgot Password - Send Reset Email
+    # Forgot Password
     path(
         "forgot-password/",
         auth_views.PasswordResetView.as_view(
@@ -62,7 +45,7 @@ urlpatterns = [
         name="password_reset"
     ),
 
-    # Password Reset Email Sent Page
+    # Reset Email Sent
     path(
         "forgot-password/done/",
         auth_views.PasswordResetDoneView.as_view(
@@ -71,16 +54,17 @@ urlpatterns = [
         name="password_reset_done"
     ),
 
-    # Set New Password Page
+    # Choose New Password
     path(
         "reset/<uidb64>/<token>/",
         auth_views.PasswordResetConfirmView.as_view(
-            template_name="registration/password_reset_confirm.html"
+            template_name="registration/password_reset_confirm.html",
+            success_url=reverse_lazy("password_reset_complete")
         ),
         name="password_reset_confirm"
     ),
 
-    # Password Changed Successfully Page
+    # Password Reset Completed
     path(
         "reset/done/",
         auth_views.PasswordResetCompleteView.as_view(
@@ -88,5 +72,5 @@ urlpatterns = [
         ),
         name="password_reset_complete"
     ),
-
 ]
+

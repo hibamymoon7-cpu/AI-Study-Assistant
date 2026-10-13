@@ -1,20 +1,14 @@
-{% load static %}
 
+{% load static %}
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
-
     <meta charset="UTF-8">
-
-    <meta name="viewport"
-          content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
     <title>Login | StudyMaster AI</title>
 
-
     <style>
-
         * {
             margin: 0;
             padding: 0;
@@ -22,451 +16,252 @@
             font-family: Arial, sans-serif;
         }
 
-
         body {
-
             min-height: 100vh;
-
             display: flex;
             justify-content: center;
             align-items: center;
-
             padding: 25px;
-
             background:
-                radial-gradient(
-                    circle at 10% 10%,
-                    #dceaff,
-                    transparent 35%
-                ),
-
-                radial-gradient(
-                    circle at 90% 90%,
-                    #cddcff,
-                    transparent 35%
-                ),
-
+                radial-gradient(circle at 10% 10%, #dceaff, transparent 35%),
+                radial-gradient(circle at 90% 90%, #cddcff, transparent 35%),
                 #edf4ff;
         }
 
-
-        /* LOGIN CARD */
-
         .login-card {
-
             width: 100%;
             max-width: 470px;
-
             padding: 42px 40px;
-
-            background: rgba(241, 246, 255, 0.95);
-
-            border-radius: 32px;
-
-            box-shadow:
-                15px 15px 35px rgba(130, 150, 190, 0.25),
-                -15px -15px 35px rgba(255, 255, 255, 0.95);
-
+            background: rgba(241, 246, 255, 0.97);
+            border: 1px solid rgba(255, 255, 255, 0.9);
+            border-radius: 30px;
+            box-shadow: 15px 15px 35px rgba(130, 150, 190, 0.22),
+                        -10px -10px 30px rgba(255, 255, 255, 0.9);
             text-align: center;
         }
 
-
-        /* LOGO */
-
         .logo-box {
-
-            width: 135px;
-            height: 135px;
-
-            margin: 0 auto 20px;
-
-            border-radius: 30px;
-
+            width: 115px;
+            height: 115px;
+            margin: 0 auto 22px;
+            border-radius: 25px;
             overflow: hidden;
-
             background: white;
-
-            box-shadow:
-                8px 8px 18px rgba(120, 145, 190, 0.25),
-                -8px -8px 18px rgba(255, 255, 255, 0.95);
+            box-shadow: 0 8px 22px rgba(100, 130, 190, 0.18);
         }
 
-
         .logo-box img {
-
             width: 100%;
             height: 100%;
-
             object-fit: cover;
         }
 
-
-        /* TITLE */
-
         h1 {
-
             color: #111b4d;
-
             font-size: 32px;
-
-            margin-bottom: 8px;
+            margin-bottom: 9px;
         }
-
 
         .subtitle {
-
             color: #69769a;
-
-            font-size: 13px;
-
-            letter-spacing: 3px;
-
-            margin-bottom: 30px;
+            font-size: 12px;
+            letter-spacing: 2.5px;
+            margin-bottom: 28px;
         }
-
-
-        /* DJANGO MESSAGES */
 
         .messages {
-
-            margin-bottom: 15px;
-        }
-
-
-        .message {
-
-            background: #ffe4e4;
-
-            color: #c62828;
-
-            padding: 11px 14px;
-
-            border-radius: 12px;
-
-            font-size: 13px;
-
-            margin-bottom: 7px;
-        }
-
-
-        /* INPUT */
-
-        .input-group {
-
-            position: relative;
-
             margin-bottom: 17px;
         }
 
+        .message {
+            padding: 12px;
+            margin-bottom: 8px;
+            border-radius: 10px;
+            font-size: 13px;
+            text-align: left;
+            background: #ffe4e4;
+            color: #b42318;
+        }
+
+        .message.success {
+            background: #dcfce7;
+            color: #166534;
+        }
+
+        .input-group {
+            position: relative;
+            margin-bottom: 18px;
+        }
 
         .input-icon {
-
             position: absolute;
-
-            left: 18px;
-
+            left: 17px;
             top: 50%;
-
             transform: translateY(-50%);
-
-            font-size: 20px;
-
-            z-index: 2;
+            font-size: 19px;
+            z-index: 1;
         }
-
 
         .input-group input {
-
             width: 100%;
-
-            height: 60px;
-
-            border: none;
-
+            height: 58px;
+            border: 1px solid transparent;
             outline: none;
-
-            border-radius: 19px;
-
-            padding: 0 18px 0 55px;
-
-            font-size: 15px;
-
+            border-radius: 16px;
+            padding: 0 17px 0 52px;
+            font-size: 14px;
             color: #26345f;
-
             background: #edf4ff;
-
-            box-shadow:
-                inset 4px 4px 10px rgba(140, 160, 200, 0.20),
-                inset -4px -4px 10px rgba(255, 255, 255, 0.95);
+            box-shadow: inset 3px 3px 8px rgba(140, 160, 200, 0.13),
+                        inset -3px -3px 8px #ffffff;
+            transition: 0.2s;
         }
-
-
-        .input-group input::placeholder {
-
-            color: #7c89aa;
-        }
-
 
         .input-group input:focus {
-
-            box-shadow:
-                inset 3px 3px 8px rgba(140, 160, 200, 0.20),
-                0 0 0 2px rgba(30, 100, 230, 0.15);
+            border-color: #8aabff;
+            box-shadow: 0 0 0 3px rgba(30, 100, 230, 0.10);
         }
 
-
-        /* OPTIONS */
-
         .options {
-
             display: flex;
-
             justify-content: space-between;
-
             align-items: center;
+            gap: 10px;
+            margin: 5px 2px 24px;
+            font-size: 12px;
+        }
 
-            margin: 5px 5px 22px;
+        .remember {
+            display: flex;
+            align-items: center;
+            gap: 7px;
+            color: #566589;
+            cursor: pointer;
+        }
 
+        .remember input {
+            accent-color: #1767e8;
+        }
+
+        .forgot {
+            color: #145ddd;
+            text-decoration: none;
+            font-weight: bold;
+        }
+
+        .forgot:hover,
+        .register-text a:hover {
+            text-decoration: underline;
+        }
+
+        .login-btn {
+            width: 100%;
+            min-height: 57px;
+            border: none;
+            border-radius: 16px;
+            cursor: pointer;
+            color: white;
+            font-size: 17px;
+            font-weight: bold;
+            background: linear-gradient(90deg, #1684ff, #164de0);
+            box-shadow: 0 9px 22px rgba(35, 100, 230, 0.25);
+            transition: 0.25s;
+        }
+
+        .login-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 12px 25px rgba(35, 100, 230, 0.35);
+        }
+
+        .register-text {
+            margin-top: 25px;
+            color: #68769a;
             font-size: 13px;
         }
 
-
-        .remember {
-
-            display: flex;
-
-            align-items: center;
-
-            gap: 7px;
-
-            color: #566589;
-
-            cursor: pointer;
-        }
-
-
-        .remember input {
-
-            width: 17px;
-            height: 17px;
-
-            accent-color: #1767e8;
-
-            cursor: pointer;
-        }
-
-
-        .forgot {
-
-            color: #145ddd;
-
-            text-decoration: none;
-
-            font-weight: bold;
-        }
-
-
-        .forgot:hover {
-
-            text-decoration: underline;
-        }
-
-
-        /* LOGIN BUTTON */
-
-        .login-btn {
-
-            width: 100%;
-
-            height: 59px;
-
-            border: none;
-
-            border-radius: 20px;
-
-            cursor: pointer;
-
-            color: white;
-
-            font-size: 18px;
-
-            font-weight: bold;
-
-            background:
-                linear-gradient(
-                    90deg,
-                    #1684ff,
-                    #164de0
-                );
-
-            box-shadow:
-                0 10px 25px rgba(35, 100, 230, 0.35);
-
-            transition: 0.3s;
-        }
-
-
-        .login-btn:hover {
-
-            transform: translateY(-2px);
-
-            box-shadow:
-                0 14px 30px rgba(35, 100, 230, 0.40);
-        }
-
-
-        .login-btn:active {
-
-            transform: translateY(0);
-        }
-
-
-        /* REGISTER */
-
-        .register-text {
-
-            margin-top: 25px;
-
-            color: #68769a;
-
-            font-size: 14px;
-        }
-
-
         .register-text a {
-
             color: #125edc;
-
             font-weight: bold;
+            text-decoration: none;
+            margin-left: 4px;
+        }
 
+        .back-home {
+            display: inline-block;
+            margin-top: 22px;
+            color: #667493;
+            font-size: 12px;
             text-decoration: none;
         }
 
-
-        .register-text a:hover {
-
-            text-decoration: underline;
+        .back-home:hover {
+            color: #145ddd;
         }
-
-
-        /* MOBILE */
 
         @media (max-width: 550px) {
-
             body {
-
                 padding: 15px;
             }
 
-
             .login-card {
-
-                padding: 35px 20px;
-
-                border-radius: 26px;
+                padding: 32px 22px;
+                border-radius: 24px;
             }
-
 
             .logo-box {
-
-                width: 110px;
-                height: 110px;
+                width: 95px;
+                height: 95px;
             }
 
-
             h1 {
-
                 font-size: 27px;
             }
 
-
             .subtitle {
-
-                font-size: 11px;
-
+                font-size: 10px;
                 letter-spacing: 2px;
             }
 
-
             .options {
-
-                font-size: 12px;
+                font-size: 11px;
             }
-
         }
-
     </style>
-
 </head>
-
 
 <body>
 
-
-    <div class="login-card">
-
+    <main class="login-card">
 
         <!-- LOGO -->
-
         <div class="logo-box">
-
             <img
                 src="{% static 'css/study-logo.jpeg' %}"
                 alt="StudyMaster AI Logo"
             >
-
         </div>
-
 
         <!-- TITLE -->
-
-        <h1>
-            Welcome Back
-        </h1>
-
-
-        <div class="subtitle">
-            SIGN IN TO CONTINUE
-        </div>
-
+        <h1>Welcome Back!</h1>
+        <div class="subtitle">SIGN IN TO CONTINUE</div>
 
         <!-- DJANGO MESSAGES -->
-
         {% if messages %}
-
-            <div class="messages">
-
+            <div class="messages" aria-live="polite">
                 {% for message in messages %}
-
-                    <div class="message">
-
+                    <div class="message {% if message.tags == 'success' %}success{% endif %}">
                         {{ message }}
-
                     </div>
-
                 {% endfor %}
-
             </div>
-
         {% endif %}
 
-
         <!-- LOGIN FORM -->
-
-        <form method="POST">
-
+        <form method="POST" action="{% url 'login' %}">
             {% csrf_token %}
 
-
-            <!-- EMAIL -->
-
             <div class="input-group">
-
-                <span class="input-icon">
-                    📧
-                </span>
-
-
+                <span class="input-icon" aria-hidden="true">📧</span>
                 <input
                     type="email"
                     name="email"
@@ -474,19 +269,10 @@
                     autocomplete="email"
                     required
                 >
-
             </div>
 
-
-            <!-- PASSWORD -->
-
             <div class="input-group">
-
-                <span class="input-icon">
-                    🔒
-                </span>
-
-
+                <span class="input-icon" aria-hidden="true">🔒</span>
                 <input
                     type="password"
                     name="password"
@@ -494,28 +280,13 @@
                     autocomplete="current-password"
                     required
                 >
-
             </div>
 
-
-            <!-- OPTIONS -->
-
             <div class="options">
-
-
                 <label class="remember">
-
-                    <input
-                        type="checkbox"
-                        name="remember"
-                    >
-
-                    <span>
-                        Remember Me
-                    </span>
-
+                    <input type="checkbox" name="remember">
+                    <span>Remember Me</span>
                 </label>
-
 
                 <a
                     href="{% url 'password_reset' %}"
@@ -523,42 +294,25 @@
                 >
                     Forgot Password?
                 </a>
-
-
             </div>
 
-
-            <!-- LOGIN BUTTON -->
-
-            <button
-                type="submit"
-                class="login-btn"
-            >
-
+            <button type="submit" class="login-btn">
                 Login →
-
             </button>
-
-
         </form>
 
-
-        <!-- REGISTER -->
-
+        <!-- REGISTER LINK -->
         <div class="register-text">
-
             Don't have an account?
-
-            <a href="{% url 'register' %}">
-                Create Account
-            </a>
-
+            <a href="{% url 'register' %}">Create Account</a>
         </div>
 
+        <!-- HOME LINK -->
+        <a href="{% url 'home' %}" class="back-home">
+            ← Back to Home
+        </a>
 
-    </div>
-
+    </main>
 
 </body>
-
 </html>
