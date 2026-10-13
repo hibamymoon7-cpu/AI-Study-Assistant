@@ -135,6 +135,7 @@ MAILERS = {
 
 # Email Configuration
 
+
 MAILERS = {
     'default': {
         'BACKEND': 'django.core.mail.backends.smtp.EmailBackend',
@@ -142,8 +143,10 @@ MAILERS = {
             'host': 'smtp.gmail.com',
             'port': 587,
             'username': 'hibamymoon7@gmail.com',
-            'password': '*********',
+            'password': 'hiba@2003',
             'use_tls': True,
         },
     },
 }
+
+DEFAULT_FROM_EMAIL = 'StudyMaster AI <hibamymoon7@gmail.com>'

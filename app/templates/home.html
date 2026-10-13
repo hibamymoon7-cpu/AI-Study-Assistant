@@ -1,0 +1,179 @@
+
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>StudyMaster AI | Home</title>
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: Arial, sans-serif;
+        }
+
+        body {
+            min-height: 100vh;
+            background: linear-gradient(135deg, #edf4ff, #dce7ff);
+            color: #172554;
+        }
+
+        nav {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 22px 8%;
+            background: white;
+            box-shadow: 0 3px 15px #17255412;
+        }
+
+        .logo {
+            font-size: 23px;
+            font-weight: bold;
+            color: #2459dc;
+        }
+
+        nav a {
+            text-decoration: none;
+            color: #334155;
+            margin-left: 20px;
+        }
+
+        .hero {
+            max-width: 1100px;
+            margin: auto;
+            padding: 100px 25px;
+            text-align: center;
+        }
+
+        .hero h1 {
+            font-size: clamp(36px, 6vw, 58px);
+            margin-bottom: 20px;
+        }
+
+        .hero h1 span {
+            color: #2459dc;
+        }
+
+        .hero p {
+            max-width: 650px;
+            margin: 0 auto 30px;
+            color: #64748b;
+            line-height: 1.8;
+            font-size: 17px;
+        }
+
+        .btn {
+            display: inline-block;
+            padding: 15px 27px;
+            margin: 8px;
+            border-radius: 12px;
+            text-decoration: none;
+            font-weight: bold;
+            background: #2459dc;
+            color: white;
+        }
+
+        .btn.secondary {
+            background: white;
+            color: #2459dc;
+            border: 1px solid #cbd5e1;
+        }
+
+        .features {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+            gap: 22px;
+            max-width: 1050px;
+            padding: 20px;
+            margin: 0 auto 70px;
+        }
+
+        .feature {
+            background: white;
+            padding: 28px;
+            border-radius: 20px;
+            box-shadow: 0 10px 30px #1725540c;
+        }
+
+        .feature h3 {
+            margin: 12px 0;
+        }
+
+        .feature p {
+            color: #64748b;
+            line-height: 1.6;
+        }
+
+        footer {
+            text-align: center;
+            padding: 25px;
+            color: #64748b;
+        }
+
+        @media (max-width: 600px) {
+            nav {
+                padding: 18px;
+                flex-wrap: wrap;
+                gap: 15px;
+            }
+
+            nav a {
+                margin-left: 8px;
+            }
+
+            .hero {
+                padding-top: 65px;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <nav>
+        <div class="logo">StudyMaster AI</div>
+        <div>
+            <a href="{% url 'login' %}">Login</a>
+            <a href="{% url 'register' %}">Register</a>
+        </div>
+    </nav>
+
+    <section class="hero">
+        <h1>Study Smarter with <span>AI</span></h1>
+        <p>
+            Upload your study materials, understand difficult topics,
+            generate summaries and practise MCQs — all in one place.
+        </p>
+
+        <a href="{% url 'register' %}" class="btn">Get Started</a>
+        <a href="{% url 'login' %}" class="btn secondary">Login</a>
+    </section>
+
+    <section class="features">
+        <div class="feature">
+            <div>📚</div>
+            <h3>Study Materials</h3>
+            <p>Keep your study notes and documents organised in one place.</p>
+        </div>
+
+        <div class="feature">
+            <div>🤖</div>
+            <h3>Ask AI</h3>
+            <p>Get help understanding topics from your study materials.</p>
+        </div>
+
+        <div class="feature">
+            <div>📝</div>
+            <h3>Generate MCQs</h3>
+            <p>Practise questions to prepare for your examinations.</p>
+        </div>
+    </section>
+
+    <footer>
+        © 2026 StudyMaster AI. Learn smarter, every day.
+    </footer>
+
+</body>
+</html>
